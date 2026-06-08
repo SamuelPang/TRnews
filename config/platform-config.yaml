@@ -1,0 +1,107 @@
+# 各平台发布配置
+
+platforms:
+  xiaohongshu:
+    name: "小红书"
+    content_type: "图文笔记"
+    image_ratio: "3:4"  # 1242x1656px
+    max_images: 9
+    max_title_length: 20
+    max_content_length: 1000
+    tags_count: 8-10
+    publish_time:
+      - "08:00"
+      - "12:00"
+      - "16:00"
+      - "20:00"
+      - "22:00"
+
+  toutiao:
+    name: "今日头条"
+    content_type: "深度文章"
+    image_ratio: "16:9"  # 1200x675px
+    max_images: 10
+    max_title_length: 30
+    max_content_length: 3000
+    tags_count: 4-8
+    publish_time:
+      - "09:00"
+      - "14:00"
+      - "16:00"
+      - "20:00"
+
+  wechat:
+    name: "微信公众号"
+    content_type: "深度报告"
+    image_ratio: "16:9"
+    max_images: 20
+    max_title_length: 64
+    max_content_length: 5000
+    tags_count: 0
+    publish_time:
+      - "08:00"
+      - "18:00"
+
+  weibo:
+    name: "微博"
+    content_type: "短内容"
+    image_ratio: "1:1"
+    max_images: 9
+    max_title_length: 0
+    max_content_length: 2000
+    tags_count: 3-5
+    publish_time:
+      - "08:00"
+      - "12:00"
+      - "18:00"
+      - "21:00"
+
+# 内容模板
+templates:
+  xiaohongshu:
+    title_pattern: "{emoji} {主题} {吸引点}"
+    content_structure:
+      - "开场白"
+      - "核心内容（分段）"
+      - "数据/案例"
+      - "建议/总结"
+      - "互动问题"
+    tags:
+      - "#热点分析"
+      - "#AI 工具"
+      - "#效率工具"
+
+  toutiao:
+    title_pattern: "{数字} {主题} {价值点}"
+    content_structure:
+      - "导语（总览）"
+      - "核心热点（分点）"
+      - "数据支撑"
+      - "策略建议"
+      - "数据来源"
+    tags:
+      - "#科技"
+      - "#财经"
+      - "#热点"
+
+# AI 分析配置
+ai_analysis:
+  model: "openai/sig-pro"
+  max_news: 150
+  timeout: 300
+  sections:
+    - "核心热点态势"
+    - "舆论风向争议"
+    - "异动与弱信号"
+    - "研判策略建议"
+    - "独立源点速览"
+
+# 发布频率限制
+frequency_limits:
+  daily_max_posts:
+    xiaohongshu: 5
+    toutiao: 4
+    wechat: 1
+    weibo: 5
+
+  min_interval_minutes: 30

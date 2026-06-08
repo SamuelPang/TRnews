@@ -1,0 +1,16 @@
+# 忽略文件
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# 图片缓存
+platforms/*/images/*.tmp
+
+# 临时文件
+*.swp
+*.bak
+
+# 配置文件（敏感信息）
+config/credentials.json
+config/api-keys.yaml
