@@ -9,36 +9,14 @@
   },
   "news_details": [
     {
-      "title": "5 月乘用车销量前十无燃油车，如何看待这一表现？燃油车未来的市场空间还有多大？",
+      "title": "北京语言大学博导路文彬「关门大吉，不再招博士」，如何看待他关于学术发表和博士就业的观点？",
       "platform": "zhihu",
-      "rank": 1,
-      "url": "https://www.zhihu.com/question/2047626265658651748",
+      "rank": 6,
+      "url": "https://www.zhihu.com/question/2046185772441772917",
       "first_seen": "08-07",
-      "last_seen": "08-27",
-      "crawl_count": 3,
-      "topic_match": "5 月乘用车销量前十无燃油车",
-      "importance": "high"
-    },
-    {
-      "title": "华尔街见闻早餐FM-Radio | 2026年6月10日",
-      "platform": "wallstreetcn-hot",
-      "rank": 9,
-      "url": "https://wallstreetcn.com/articles/3774266",
-      "first_seen": "08-27",
-      "last_seen": "08-27",
-      "crawl_count": 1,
-      "topic_match": "华尔街见闻",
-      "importance": "high"
-    },
-    {
-      "title": "科技股抛售潮再袭，纳指跌破上周五低点，消费股撑道指收涨，金银油齐跌",
-      "platform": "wallstreetcn-hot",
-      "rank": 1,
-      "url": "https://wallstreetcn.com/articles/3774176",
-      "first_seen": "08-07",
-      "last_seen": "08-27",
-      "crawl_count": 3,
-      "topic_match": "科技股抛售潮",
+      "last_seen": "08-53",
+      "crawl_count": 5,
+      "topic_match": "关门大吉",
       "importance": "high"
     }
   ]
