@@ -1,12 +1,112 @@
-# 小红书图文稿件
+#!/usr/bin/env python3
+"""
+生成符合新规则的小红书文稿（5 篇独立笔记结构）
+参考 6 月 8 日有流量版本的结构
+"""
 
----
+import json
+import sqlite3
+import os
+import sys
+from datetime import datetime
 
-## 笔记 1：AI 热点日报
+# 配置
+WORKSPACE = "/home/sai/.openclaw/workspace-selfmng"
+TRNEWS_DIR = f"{WORKSPACE}/TRnews"
+TRENDRADAR_DIR = f"{WORKSPACE}/workspace/TrendRadar"
+DATE = datetime.now().strftime("%Y-%m-%d")
+
+AI_ANALYSIS_FILE = f"{TRNEWS_DIR}/data/{DATE}/ai-analysis-{DATE}.md"
+NEWS_JSON_FILE = f"{TRNEWS_DIR}/data/{DATE}/news-{DATE}.json"
+TRENDRADAR_DB = f"/home/sai/.openclaw/workspace/TrendRadar/output/news/{DATE}.db"
+
+OUTPUT_DIR = f"{TRNEWS_DIR}/platforms/xiaohongshu/{DATE}"
+OUTPUT_FILE = f"{OUTPUT_DIR}/{DATE}-xiaohongshu-new.md"
+
+
+def read_ai_analysis():
+    """读取 AI 分析文件"""
+    if not os.path.exists(AI_ANALYSIS_FILE):
+        print(f"❌ AI 分析文件不存在：{AI_ANALYSIS_FILE}")
+        return None
+    
+    with open(AI_ANALYSIS_FILE, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # 解析各板块
+    sections = {
+        'core_trend': '',
+        'public_opinion': '',
+        'anomaly': '',
+        'strategy': '',
+        'source_overview': ''
+    }
+    
+    current_section = None
+    for line in content.split('\n'):
+        if line.startswith('## 核心热点态势'):
+            current_section = 'core_trend'
+        elif line.startswith('## 舆论风向争议'):
+            current_section = 'public_opinion'
+        elif line.startswith('## 异动与弱信号'):
+            current_section = 'anomaly'
+        elif line.startswith('## 研判策略建议'):
+            current_section = 'strategy'
+        elif line.startswith('## 独立源点速览'):
+            current_section = 'source_overview'
+        elif line.startswith('#'):
+            continue
+        
+        if current_section:
+            sections[current_section] += line + '\n'
+    
+    return sections
+
+
+def get_top_news():
+    """获取 Top 新闻"""
+    if not os.path.exists(TRENDRADAR_DB):
+        print(f"⚠️ TrendRadar 数据库不存在：{TRENDRADAR_DB}")
+        return []
+    
+    conn = sqlite3.connect(TRENDRADAR_DB)
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        SELECT platform_id, title, rank, url 
+        FROM news_items 
+        WHERE rank <= 10
+        ORDER BY rank ASC
+        LIMIT 20
+    """)
+    
+    news = cursor.fetchall()
+    conn.close()
+    
+    return news
+
+
+def generate_note1_hot_daily(sections, top_news):
+    """生成笔记 1：AI 热点日报"""
+    core_trend = sections.get('core_trend', '')[:500]
+    
+    # 提取热点
+    hotspots = []
+    if '1.' in core_trend:
+        lines = core_trend.split('\n')
+        for line in lines:
+            if '1.' in line or '2.' in line or '3.' in line:
+                hotspots.append(line.strip())
+    
+    news_lines = []
+    for platform, title, rank, url in top_news[:5]:
+        news_lines.append(f"- 【{platform}】Rank {rank}: {title[:40]}")
+    
+    return f"""## 笔记 1：AI 热点日报
 
 **封面标题：**
 ```
-🤖 2026-06-19 热点日报
+🤖 {DATE} 热点日报
 AI 帮你抓重点
 ```
 
@@ -18,7 +118,7 @@ AI 帮你抓重点
 **正文内容：**
 
 ```
-📱 2026-06-19 热点日报｜AI 帮你抓重点
+📱 {DATE} 热点日报｜AI 帮你抓重点
 
 宝子们！今天的热搜有点复杂，我用 AI 帮大家梳理了重点，3 分钟 get 全网热点✨
 
@@ -45,42 +145,19 @@ AI 帮你抓重点
 
 💬 网友都在聊什么？
 
-- 【toutiao】Rank 1: 世界杯最疯狂20分钟
-- 【baidu】Rank 1: 世界杯开赛后最疯狂一战诞生
-- 【wallstreetcn-hot】Rank 1: 霍尔木兹海峡重开提振股债，半导体指数收创新高，原油走V，美元两连涨，黄金承压
-- 【thepaper】Rank 1: 马上评｜办五粮液案却扣押茅台，酒去哪儿了？
-- 【bilibili-hot-search】Rank 1: 三支CN战队将出战TI2026
+{chr(10).join(news_lines)}
 
 ━━━━━━━━━━━━━━━━━━━━
 
 ⚠️ 这些信号要注意
 
-## 异动与弱信号
-
-【跨平台温差】
-「加拿大断腿」在微博、知乎高热度，但财经类平台关注有限，属情绪性爆发。
-
-【轨迹突变】
-「豆包日活」话题在知乎从 15 急升至 7，反映商业化焦虑上升。
-
-【弱信号捕捉】
-SK 海力士取消学历要求轨迹稳定在 15-18，暗示行业门槛松动，人才策略转向能力导向。
-
-
+{sections.get('anomaly', '')[:300]}
 
 ━━━━━━━━━━━━━━━━━━━━
 
 💡 AI 小建议
 
-## 研判策略建议
-
-1. 投资者：警惕 AI 板块「利好出尽」风险，关注杨立昆警告背后的估值回调压力。
-
-2. 品牌方：世界杯期间规避暴力话题营销，转向体育精神正面引导。
-
-3. 公众：关注高温天气热射病风险，参考知乎「热射病」话题做好防暑。
-
-
+{sections.get('strategy', '')[:400]}
 
 ━━━━━━━━━━━━━━━━━━━━
 
@@ -111,7 +188,12 @@ TrendRadar AI 热点分析系统
 ```
 
 ---
-## 笔记 2：AI 资本化
+"""
+
+
+def generate_note2_ai_capital(sections, top_news):
+    """生成笔记 2：AI 资本化"""
+    return f"""## 笔记 2：AI 资本化
 
 **封面标题：**
 ```
@@ -199,11 +281,16 @@ TrendRadar AI 热点分析系统
 ```
 
 ---
-## 笔记 3：投资警示
+"""
+
+
+def generate_note3_investment_warning(sections, top_news):
+    """生成笔记 3：投资警示"""
+    return f"""## 笔记 3：投资警示
 
 **封面标题：**
 ```
-📈 2026-06-19 投资警示
+📈 {DATE} 投资警示
 这三个风险点要注意
 ```
 
@@ -215,7 +302,7 @@ TrendRadar AI 热点分析系统
 **正文内容：**
 
 ```
-📈 2026-06-19 投资警示
+📈 {DATE} 投资警示
 
 今天 AI 监测到 3 个重要信号，投资者一定要关注⚠️
 
@@ -305,7 +392,12 @@ AI 代码认可度高与 AI 文章同质化形成悖论
 ```
 
 ---
-## 笔记 4：数字资产
+"""
+
+
+def generate_note4_digital_asset(sections, top_news):
+    """生成笔记 4：数字资产"""
+    return f"""## 笔记 4：数字资产
 
 **封面标题：**
 ```
@@ -392,7 +484,12 @@ AI 代码认可度高与 AI 文章同质化形成悖论
 ```
 
 ---
-## 笔记 5：AI 工具推荐
+"""
+
+
+def generate_note5_ai_tool(sections, top_news):
+    """生成笔记 5：AI 工具推荐"""
+    return f"""## 笔记 5：AI 工具推荐
 
 **封面标题：**
 ```
@@ -501,7 +598,12 @@ TrendRadar AI 🌟
 ```
 
 ---
-## 发布建议
+"""
+
+
+def generate_publish_guide():
+    """生成发布建议"""
+    return f"""## 发布建议
 
 ### 发布节奏
 ```
@@ -546,3 +648,51 @@ TrendRadar AI 🌟
 ⚠️ 不发布敏感内容
 ⚠️ 保持更新频率
 ```
+"""
+
+
+def main():
+    print(f"==========================================")
+    print(f"📱 生成小红书文稿（新结构）")
+    print(f"📅 日期：{DATE}")
+    print(f"==========================================")
+    
+    # 读取 AI 分析
+    print("\n📖 读取 AI 分析...")
+    sections = read_ai_analysis()
+    if not sections:
+        print("❌ AI 分析读取失败")
+        return 1
+    
+    print(f"✅ AI 分析读取成功")
+    
+    # 获取 Top 新闻
+    print("\n🔍 获取 Top 新闻...")
+    top_news = get_top_news()
+    print(f"✅ 获取到 {len(top_news)} 条新闻")
+    
+    # 创建输出目录
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    
+    # 生成文稿
+    print("\n✍️ 生成文稿...")
+    content = "# 小红书图文稿件\n\n---\n\n"
+    content += generate_note1_hot_daily(sections, top_news)
+    content += generate_note2_ai_capital(sections, top_news)
+    content += generate_note3_investment_warning(sections, top_news)
+    content += generate_note4_digital_asset(sections, top_news)
+    content += generate_note5_ai_tool(sections, top_news)
+    content += generate_publish_guide()
+    
+    # 写入文件
+    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+        f.write(content)
+    
+    print(f"✅ 文稿生成成功：{OUTPUT_FILE}")
+    print(f"📊 文件大小：{os.path.getsize(OUTPUT_FILE)} 字节")
+    
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

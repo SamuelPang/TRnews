@@ -168,10 +168,52 @@ platforms/
 EOF
 echo "✅ 创建综合摘要"
 
-# 阶段 5: Git 提交和推送
+# 阶段 5: 生成新结构小红书文稿
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "💾 阶段 5: Git 提交和推送"
+echo "📱 阶段 5: 生成新结构小红书文稿"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+cd "$TRNEWS_DIR"
+
+# 确保 data 目录已更新
+if [ -f "data/$DATE/ai-analysis-$DATE.md" ]; then
+    echo "✅ data 目录已就绪"
+    
+    # 生成新结构小红书文稿（5 篇独立笔记）
+    python3 scripts/generate-xiaohongshu-new.py
+    
+    # 复制新文稿到主文件
+    NEW_XHS_FILE="platforms/xiaohongshu/$DATE/$DATE-xiaohongshu-new.md"
+    if [ -f "$NEW_XHS_FILE" ]; then
+        cp "$NEW_XHS_FILE" "platforms/xiaohongshu/$DATE/$DATE-xiaohongshu.md"
+        echo "✅ 新结构小红书文稿已生成并覆盖主文件"
+        
+        # 复制到其他平台目录
+        mkdir -p "platforms/wechat/$DATE"
+        mkdir -p "platforms/weibo/$DATE"
+        mkdir -p "platforms/twitter/$DATE"
+        mkdir -p "platforms/zhihu/$DATE"
+        mkdir -p "platforms/toutiao/$DATE"
+        mkdir -p "reports/$DATE"
+        
+        cp "platforms/xiaohongshu/$DATE/$DATE-xiaohongshu.md" "platforms/wechat/$DATE/$DATE-xiaohongshu.md"
+        cp "platforms/xiaohongshu/$DATE/$DATE-xiaohongshu.md" "platforms/weibo/$DATE/$DATE-xiaohongshu.md"
+        cp "platforms/xiaohongshu/$DATE/$DATE-xiaohongshu.md" "platforms/twitter/$DATE/$DATE-xiaohongshu.md"
+        cp "platforms/xiaohongshu/$DATE/$DATE-xiaohongshu.md" "platforms/zhihu/$DATE/$DATE-xiaohongshu.md"
+        cp "platforms/xiaohongshu/$DATE/$DATE-xiaohongshu.md" "platforms/toutiao/$DATE/$DATE-xiaohongshu.md"
+        cp "platforms/xiaohongshu/$DATE/$DATE-xiaohongshu.md" "reports/$DATE/$DATE-xiaohongshu.md"
+        echo "✅ 已复制到其他平台目录"
+    else
+        echo "⚠️ 新结构小红书文稿生成失败"
+    fi
+else
+    echo "⚠️ data 目录未就绪，跳过小红书文稿生成"
+fi
+
+# 阶段 6: Git 提交和推送
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "💾 阶段 6: Git 提交和推送"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 # 检查是否有新文件
@@ -186,7 +228,7 @@ else
     git add .
     
     echo "💾 Git 提交..."
-    git commit -m "📰 $DATE 新闻报告更新" || echo "无变更"
+    git commit -m "📰 $DATE 新闻报告更新（含新结构小红书文稿）" || echo "无变更"
     
     echo "🚀 推送到 GitHub..."
     git push origin main
