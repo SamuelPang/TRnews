@@ -45,10 +45,10 @@ AI 帮你抓重点
 
 💬 网友都在聊什么？
 
-- 【toutiao】Rank 1: 世界杯最疯狂20分钟
 - 【baidu】Rank 1: 世界杯开赛后最疯狂一战诞生
 - 【wallstreetcn-hot】Rank 1: 霍尔木兹海峡重开提振股债，半导体指数收创新高，原油走V，美元两连涨，黄金承压
 - 【thepaper】Rank 1: 马上评｜办五粮液案却扣押茅台，酒去哪儿了？
+- 【thepaper】Rank 1: 头条世界杯｜70分钟后5球连环炸，世界杯等来“晚高峰”
 - 【bilibili-hot-search】Rank 1: 三支CN战队将出战TI2026
 
 ━━━━━━━━━━━━━━━━━━━━
