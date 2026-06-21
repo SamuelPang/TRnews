@@ -49,7 +49,7 @@ AI 帮你抓重点
 - 【wallstreetcn-hot】Rank 1: “新美联储通讯社”：1996还是1999？沃什的第一场考验是“如何看AI”
 - 【wallstreetcn-hot】Rank 1: 鸿海董事长：每1GW Vera Rubin数据中心，资本开支高达470亿美元，每
 - 【thepaper】Rank 1: 首例捂嘴染红！世界杯又起争议，阿尔米隆悲提“新规体验官”
-- 【bilibili-hot-search】Rank 1: NiKo时隔五年再进Major决赛
+- 【thepaper】Rank 1: 伊朗军方宣布关闭霍尔木兹海峡
 
 ━━━━━━━━━━━━━━━━━━━━
 
