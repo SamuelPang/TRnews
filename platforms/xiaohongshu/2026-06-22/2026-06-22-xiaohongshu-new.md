@@ -52,7 +52,7 @@ AI 帮你抓重点
 - 【baidu】Rank 1: 世界杯：乌拉圭vs佛得角
 - 【wallstreetcn-hot】Rank 1: 下周重磅日程：“美联储最爱通胀指标”、英伟达股东大会、OpenAI或发新模型、美
 - 【thepaper】Rank 1: 坠海6天6夜，一个生意人的绝境求生
-- 【bilibili-hot-search】Rank 1: NiKo圆梦Major
+- 【thepaper】Rank 1: 雷军再谈与董明珠打赌：只是开玩笑，没想到被激怒了就从头到尾批评我和小米
 
 ━━━━━━━━━━━━━━━━━━━━
 

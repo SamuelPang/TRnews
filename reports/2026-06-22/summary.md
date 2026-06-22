@@ -10,10 +10,10 @@
 
 ## 📱 发布内容
 
-- **wechat**: 81 行
-- **weibo**: 9 行
-- **twitter**: 9 行
-- **zhihu**: 76 行
+- **wechat**: 76 行
+- **weibo**: 8 行
+- **twitter**: 8 行
+- **zhihu**: 69 行
 - **xiaohongshu**: 237 行
 - **toutiao**: 176 行
 
