@@ -83,8 +83,9 @@ generate_trnews_report() {
     fi
     
     # 统计稿件数量
+    local article_count=0
     if [ -d "$TRNEWS_DIR/reports/$DATE" ]; then
-       稿件数量=$(ls "$TRNEWS_DIR/reports/$DATE/"*.md 2>/dev/null | wc -l || echo "0")
+        article_count=$(ls "$TRNEWS_DIR/reports/$DATE/"*.md 2>/dev/null | wc -l || echo "0")
     fi
     
     # 检查 Git 推送
@@ -107,7 +108,7 @@ generate_trnews_report() {
 🔧 执行状态:
   • TrendRadar 抓取：$trendradar_status
   • AI 分析生成：$ai_analysis_status
-  • 稿件生成：$稿件数量 篇
+  • 稿件生成：$article_count 篇
   • Git 推送：$git_push_status
 
 📂 文件位置:
