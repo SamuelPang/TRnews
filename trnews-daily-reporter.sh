@@ -15,7 +15,7 @@ LOG_FILE="$LOG_DIR/trnews-daily-reporter_${DATE}.log"
 
 # Discord 配置
 DISCORD_ACCOUNT="wallej"
-DISCORD_TARGET="channel:1477848399028945078"  # Current channel ID
+DISCORD_TARGET="channel:1477848399028945078"
 
 # 日志函数
 log() {
@@ -67,8 +67,8 @@ generate_trnews_report() {
     local status="✅ 执行成功"
     local trendradar_status="❌"
     local ai_analysis_status="❌"
-    local稿件数量=0
     local git_push_status="❌"
+    local article_count=0
     
     # 检查 TrendRadar 状态
     if grep -q "✅ TrendRadar 运行完成" "$LOG_FILE" 2>/dev/null; then
@@ -83,7 +83,6 @@ generate_trnews_report() {
     fi
     
     # 统计稿件数量
-    local article_count=0
     if [ -d "$TRNEWS_DIR/reports/$DATE" ]; then
         article_count=$(ls "$TRNEWS_DIR/reports/$DATE/"*.md 2>/dev/null | wc -l || echo "0")
     fi
@@ -95,8 +94,9 @@ generate_trnews_report() {
     
     # 获取 GitHub 链接
     local github_url="https://github.com/SamuelPang/TRnews"
-    if grep -oP 'https://github.com/[^"\s]+' "$LOG_FILE" 2>/dev/null | tail -1 | grep -q "github.com"; then
-        github_url=$(grep -oP 'https://github.com/[^"\s]+' "$LOG_FILE" 2>/dev/null | tail -1)
+    local last_git_url=$(grep -oP 'https://github.com/[^"\s]+' "$LOG_FILE" 2>/dev/null | tail -1)
+    if [ -n "$last_git_url" ]; then
+        github_url="$last_git_url"
     fi
     
     # 构建报告消息
