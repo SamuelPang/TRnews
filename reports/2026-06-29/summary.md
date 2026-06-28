@@ -14,7 +14,7 @@
 - **weibo**: 6 行
 - **twitter**: 6 行
 - **zhihu**: 45 行
-- **xiaohongshu**: 223 行
+- **xiaohongshu**: 555 行
 - **toutiao**: 170 行
 
 ## 📂 文件位置

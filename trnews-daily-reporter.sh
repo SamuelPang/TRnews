@@ -13,10 +13,6 @@ TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 LOG_DIR="$TRNEWS_DIR/logs"
 LOG_FILE="$LOG_DIR/trnews-daily-reporter_${DATE}.log"
 
-# Discord 配置
-DISCORD_ACCOUNT="wallej"
-DISCORD_TARGET="channel:1477848399028945078"
-
 # 日志函数
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
@@ -32,10 +28,11 @@ send_discord_report() {
     
     log "发送 Discord 报告..."
     
+    # 使用 wallej 账号发送到当前频道
     openclaw message send \
         --channel discord \
-        --account "$DISCORD_ACCOUNT" \
-        --target "$DISCORD_TARGET" \
+        --account wallej \
+        --target "channel:1477848399028945078" \
         --message "$message" 2>&1 | tee -a "$LOG_FILE"
     
     log "✅ Discord 报告发送完成"
